@@ -18,7 +18,7 @@ export default function Letters({content, showResult}: LettersProps){
     }
 
     return (
-            <div className="font-belleAllure text-8xl t-20 flex flex-row justify-center">
+            <div className="font-belleAllure text-8xl top-24 flex flex-row justify-center relative">
                 <div> {
                     content.letters.map((letter, idx) => 
                         <span key={idx} className={colorClass[getColor(idx)]}>

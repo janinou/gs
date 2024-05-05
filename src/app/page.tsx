@@ -5,20 +5,27 @@ import Controls from "./controls";
 import Content from "./displayed-content";
 import { getMaximumTurnIndex } from "./pedagogical-content";
 
+class Pauser {
+    isActive: boolean = false
+    switch = () => this.isActive = !this.isActive
+}
+
+let pauser = new Pauser()
 
 export default function Game() {
     let [gameStatus, setGameStatus] = useState<GameStatus>('not_started');
     let [gameType, setGameType] = useState<GameType>();
 
     let [turnNumber, setTurnNumber] = useState<number>(0);
-    let [isPaused, setPaused] = useState(false);
+
+    let [isPaused, setIsPaused] = useState(pauser.isActive)
 
 
     useEffect(() => {
-        const triggerPauseIfSpacePressed = (e:KeyboardEvent) => keyIsSpace(e) && setPaused(!isPaused)
-        window.addEventListener('keyup', triggerPauseIfSpacePressed )
-        return () => window.removeEventListener( 'keyup', triggerPauseIfSpacePressed)
-    }, [isPaused]);
+         const triggerPauseIfSpacePressed = (e:KeyboardEvent) => keyIsSpace(e) && pauseGame()
+         window.addEventListener('keyup', triggerPauseIfSpacePressed )
+         return () => window.removeEventListener( 'keyup', triggerPauseIfSpacePressed)
+     }, [isPaused]);
 
     const launchGame = (gameType:GameType) => {
         if (gameStatus === 'not_started'){
@@ -33,6 +40,11 @@ export default function Game() {
         setTurnNumber(0);
     }
 
+    const pauseGame = () => {
+        pauser.switch()
+        setIsPaused(pauser.isActive)
+    }
+
     const setNextTurn = () => {
         let nextTurnNumber = turnNumber + 1
         if (isLastRound(gameType as GameType, nextTurnNumber)) 
@@ -43,7 +55,7 @@ export default function Game() {
 
     async function waitIfPaused(){
         return new Promise<void>( async (resolve) => {
-            if (isPaused){
+            if (pauser.isActive){
                 await keyIsPressed('space');
             }
             resolve();
@@ -59,7 +71,7 @@ export default function Game() {
         <div>
             <span>  {gameType && `${turnNumber} / ${getMaximumTurnIndex(gameType)}`} </span>
 
-            <Controls pauseStatus={isPaused} gameStatus={gameStatus} launchGame={launchGame} stopGame={stopGame}/>
+            <Controls pauseStatus={isPaused} gameStatus={gameStatus} launchGame={launchGame} stopGame={stopGame} pauseGame={pauseGame}/>
             { 
                 ((gameStatus === 'started') && (gameType !== undefined))?
                     <Content 
@@ -80,6 +92,8 @@ export default function Game() {
         </div>
   );
 }
+
+
 
 const isLastRound = (gameType:GameType, turnNumber:number) => (turnNumber >= getMaximumTurnIndex(gameType))
 
