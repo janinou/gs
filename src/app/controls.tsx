@@ -13,10 +13,12 @@ export default function Controls({pauseStatus, gameStatus, launchGame, stopGame}
             <span>{pauseStatusWording}</span>
             { (gameStatus !== 'started') ? 
                 <div>
-                    <ControlsButton onClick={() => launchGame('addition')} wording='Lancer les maths'/>
-                    <ControlsButton onClick={() => launchGame('letters')} wording='Lancer les lettres'/>
+                    <ControlsButton onClick={() => launchGame('addition')} wording='Additions'/>
+                    <ControlsButton onClick={() => launchGame('letters')} wording='Lettres'/>
+                    <ControlsButton onClick={() => launchGame('syllabes')} wording='Syllabes'/>
+
                 </div>
-                :<ControlsButton onClick={() => stopGame()} wording='Arrêter le jeu'/>
+                :<ControlsButton onClick={() => stopGame()} wording='Arrêter'/>
             }
 
         </div>
@@ -25,7 +27,7 @@ export default function Controls({pauseStatus, gameStatus, launchGame, stopGame}
 
 function ControlsButton({onClick, wording}: { onClick:()=> void, wording:string}){
     return (
-        <button onClick={onClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"> 
+        <button onClick={onClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full m-4 inline-block"> 
             {wording}
         </button>
     )

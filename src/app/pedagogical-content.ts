@@ -12,7 +12,8 @@ type GetContentByGameType = { [K in GameType]: (diff:Difficulty) => PedagogicalC
 function getMaximumTurnIndex(gameType:GameType){
     const maxTurnsByGameType: MaxTurnsByGameType = {
         'addition': 20,
-        'letters': 45,
+        'letters': 30,
+        'syllabes': 15
     }
     return maxTurnsByGameType[gameType]
 }
@@ -23,7 +24,8 @@ function getContent(gameType:GameType, roundNumber: number):PedagogicalContent {
 
     let getContentByGameType: GetContentByGameType = {
         addition: getAdditionContent,
-        letters: getLettersContent
+        letters: getLettersContent,
+        syllabes: getSyllabesContent
     }
 
     return getContentByGameType[gameType](difficulty)
@@ -34,10 +36,15 @@ function getDifficulty(gameType:GameType, turnNumber: number):Difficulty{
     const turnThreshold: TurnThresholds = {
         addition: {
             hard: 14,
-            medium: 8,
+            medium: 6,
             easy:0
         },
         letters:{
+            hard:30,
+            medium:15,
+            easy:0
+        },
+        syllabes: {
             hard:30,
             medium:15,
             easy:0
@@ -77,26 +84,21 @@ function getLettersContent(difficulty:Difficulty):LettersContent{
     let letters = {
         lowercase: 'azertyuiopmlkjhgfdsqwxcvbn'.split(''),
         uppercase: 'AZERTYUIOPMLKJHGFDSQWXCVBN'.split(''),
-        anycase: 'azertyuiopmlkjhgfdsqwxcvbnAZERTYUIOPMLKJHGFDSQWXCVBN'.split(''),
+        anycase: 'azertyuiopmlkjhgfdsqwxcvbnAZERTYUIOPMLKJHGFDSQWXCVBN'.split('')
+    }
+
+    return {letters: [randomItem(letters.lowercase)] }
+}
+
+function getSyllabesContent():SyllabesContent{
+    let letters = {
         consonants:'zrtpmlkjhgfdsqwxcvbn'.split(''),
         vowels:'aeuio'.split('')
     }
-
-    let content = {letters: [] as string[]}
-
-    switch (difficulty){
-        case 'easy': content.letters.push( randomItem(letters.anycase) ); break;
-        case 'medium': 
-            content.letters.push( randomItem(letters.lowercase) )
-            content.letters.push( randomItem(letters.lowercase) ) 
-            ; break;
-        case 'hard':  
-            content.letters.push( randomItem(letters.consonants) ); 
-            content.letters.push( randomItem(letters.vowels) );
-            break;
-        default: throw new Error(`Invalid difficulty: ${difficulty}`);
-    }
-
-    return content;
+    return {letters: [
+        randomItem(letters.consonants),
+        randomItem(letters.vowels)
+    ]}
 }
+
 export {getContent, getMaximumTurnIndex}

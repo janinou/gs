@@ -36,7 +36,7 @@ export default function Game() {
     const setNextTurn = () => {
         let nextTurnNumber = turnNumber + 1
         if (isLastRound(gameType as GameType, nextTurnNumber)) 
-            setGameStatus('done');
+            stopGame();
         else
             setTurnNumber(nextTurnNumber)
     }
@@ -57,7 +57,7 @@ export default function Game() {
 
   return (
         <div>
-            <span>{gameStatus} {turnNumber}</span>
+            <span>  {gameType && `${turnNumber} / ${getMaximumTurnIndex(gameType)}`} </span>
 
             <Controls pauseStatus={isPaused} gameStatus={gameStatus} launchGame={launchGame} stopGame={stopGame}/>
             { 
@@ -67,7 +67,7 @@ export default function Game() {
                         turnNumber={turnNumber} 
                         setNextTurn={setNextTurn} 
                         playSound={playSound} 
-                        waitIfPaused={waitIfPaused} 
+                        waitIfPaused={waitIfPaused}
                         forceNextStage={forceNextStage}
                         />
                     :null
