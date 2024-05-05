@@ -16,13 +16,13 @@ export default function Controls({pauseStatus, gameStatus, launchGame, pauseGame
             {
                 (gameStatus !== 'started') ? 
                 <div className="inline-block">
-                    <PrimaryButton color='blue' onClick={() => launchGame('addition')} wording='Additions'/>
-                    <PrimaryButton color='blue' onClick={() => launchGame('letters')} wording='Lettres'/>
-                    <PrimaryButton color='blue' onClick={() => launchGame('syllabes')} wording='Syllabes'/>
+                    <PrimaryButton onClick={() => launchGame('addition')} wording='Additions'/>
+                    <PrimaryButton onClick={() => launchGame('letters')} wording='Lettres'/>
+                    <PrimaryButton onClick={() => launchGame('syllabes')} wording='Syllabes'/>
                 </div>
                 :<div className="inline-block">
-                <PrimaryButton color='blue' onClick={() => pauseGame()} wording={pauseButtonWording}/>
-                    <PrimaryButton color='blue' onClick={() => stopGame()} wording='Arrêter'/>
+                <PrimaryButton onClick={() => pauseGame()} wording={pauseButtonWording}/>
+                    <PrimaryButton onClick={() => stopGame()} wording='Arrêter'/>
 
                 </div>
 
@@ -32,9 +32,9 @@ export default function Controls({pauseStatus, gameStatus, launchGame, pauseGame
     )
 }
 
-function PrimaryButton({onClick, wording, color}: { onClick:()=> void, wording:string, color:string}){
+function PrimaryButton({onClick, wording}: { onClick:()=> void, wording:string}){
     return (
-        <button onClick={onClick} className={`bg-${color}-500 hover:bg-${color}-700 text-white font-bold py-2 px-4 rounded-full m-4 inline-block`}> 
+        <button onClick={onClick} className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full m-4 inline-block`}> 
             {wording}
         </button>
     )
